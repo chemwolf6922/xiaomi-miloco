@@ -12,14 +12,6 @@
 
 #include "mutil-modal/mtmd.h"
 
-// Simple hash function for strings
-uint64_t simple_hash(const std::string& str);
-
-// Convert hash to hex string
-std::string hash_to_hex(uint64_t hash);
-
-std::string get_chunk_description(const mtmd_input_chunk* chunk);
-
 std::vector<std::string> chunk_hashs(mtmd::input_chunks* input_chunks);
 
 #endif  // CHUNK_HASH_H
