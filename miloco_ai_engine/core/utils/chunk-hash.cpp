@@ -8,29 +8,23 @@
 #include <sstream>
 #include <vector>
 
-class StreamHasher {
-  public:
-    void update(const void* data, size_t size) {
-        const unsigned char* bytes = static_cast<const unsigned char*>(data);
-        for (size_t i = 0; i < size; ++i) {
-            hash_ ^= static_cast<uint64_t>(bytes[i]);
-            hash_ *= 0x01000193;
-        }
+void StreamHasher::update(const void* data, size_t size) {
+    const unsigned char* bytes = static_cast<const unsigned char*>(data);
+    for (size_t i = 0; i < size; ++i) {
+        hash_ ^= static_cast<uint64_t>(bytes[i]);
+        hash_ *= PRIME_;
     }
+}
 
-    void update(const std::string& str) { update(str.data(), str.size()); }
+void StreamHasher::update(const std::string& str) { update(str.data(), str.size()); }
 
-    std::string digest() const {
-        std::stringstream stream;
-        stream << std::hex << std::setfill('0') << std::setw(16) << hash_;
-        return stream.str();
-    }
+std::string StreamHasher::digest() const {
+    std::stringstream stream;
+    stream << std::hex << std::setfill('0') << std::setw(16) << hash_;
+    return stream.str();
+}
 
-  private:
-    uint64_t hash_ = 0x811c9dc5;
-};
-
-static std::string get_chunk_description(const mtmd_input_chunk* chunk) {
+std::string get_chunk_description(const mtmd_input_chunk* chunk) {
     if (chunk == nullptr) return "";
     std::stringstream stream;
 
